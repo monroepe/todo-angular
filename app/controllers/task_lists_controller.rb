@@ -2,11 +2,11 @@ class TaskListsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @task_lists = task_list.order(:name)
+    @task_lists = current_user.task_lists
   end
 
   def show
-    @task_list = task_list.find(params[:id])
+    @task_list = current_user.task_lists.find(params[:id])
     @tasks = @task_list.tasks
   end
 
@@ -25,11 +25,11 @@ class TaskListsController < ApplicationController
   end
 
   def edit
-    @task_list = task_list.find(params[:id])
+    @task_list = current_user.task_lists.find(params[:id])
   end
 
   def update
-    @task_list = task_list.find(params[:id])
+    @task_list = current_user.task_lists.find(params[:id])
 
     if @task_list.update(task_list_params)
       redirect_to @task_list, notice: "Task List updated successfully!"
@@ -39,7 +39,7 @@ class TaskListsController < ApplicationController
   end
 
   def destroy
-    @task_list = task_list.find(params[:id])
+    @task_list = current_user.task_lists.find(params[:id])
 
     @task_list.destroy
 
