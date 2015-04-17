@@ -3,7 +3,11 @@ Rails.application.routes.draw do
 
   root 'welcome#index'
 
-  resources :task_lists do
+  resources :users, only: [] do
+    resources :task_lists
+  end
+
+  resources :task_lists, only: [] do
     resources :tasks, only: [:show, :new, :create, :edit, :update, :destroy]
   end
 end

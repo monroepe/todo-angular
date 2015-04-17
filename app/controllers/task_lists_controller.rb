@@ -11,14 +11,14 @@ class TaskListsController < ApplicationController
   end
 
   def new
-    @task_list = task_list.new
+    @task_list = TaskList.new
   end
 
   def create
     @task_list = current_user.task_lists.build(task_list_params)
 
     if @task_list.save
-      redirect_to @task_list, notice: "Task List created successfully!"
+      redirect_to user_task_list_path(current_user, @task_list), notice: "Task List created successfully!"
     else
       render "new"
     end
@@ -43,7 +43,7 @@ class TaskListsController < ApplicationController
 
     @task_list.destroy
 
-    redirect_to task_lists_path, notice: "Task List deleted successfully!"
+    redirect_to user_task_lists_path, notice: "Task List deleted successfully!"
   end
 
   private
