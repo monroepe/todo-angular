@@ -2,13 +2,14 @@ class TasksController < ApplicationController
   before_action :authenticate_user!
 
   def new
-    @task = task.new
+    @task_list = TaskList.find(params[:task_list_id])
+    @task = Task.new
   end
 
   def create
-    @task_list = Task_List.find(params[:task_list_id])
-    @task = current_user.tasks.build(task_params)
-    @task.task_list = @task_list
+    @task_list = TaskList.find(params[:task_list_id])
+    @task = @task_list.tasks.build(task_params)
+    @task.user = current_user
 
     if @task.save
       redirect_to @task_list, notice: "Task List created successfully!"
@@ -18,12 +19,13 @@ class TasksController < ApplicationController
   end
 
   def edit
-    @task = task.find(params[:id])
+    @task_list = TaskList.find(params[:task_list_id])
+    @task = @task_list.tasks.find(params[:id])
   end
 
   def update
-    @task_list = Task_List.find(params[:task_list_id])
-    @task = task.find(params[:id])
+    @task_list = TaskList.find(params[:task_list_id])
+    @task = @task_list.tasks.find(params[:id])
 
     if @task.update(task_params)
       redirect_to @task_list, notice: "Task List updated successfully!"
@@ -33,8 +35,8 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @task_list = Task_List.find(params[:task_list_id])
-    @task = task.find(params[:id])
+    @task_list = TaskList.find(params[:task_list_id])
+    @task = @task_list.tasks.find(params[:id])
 
     @task.destroy
 
